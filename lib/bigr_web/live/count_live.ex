@@ -2,6 +2,7 @@ defmodule BigrWeb.CountLive do
   use BigrWeb, :live_view
 
   alias Bigr.Counter
+  alias BigrWeb.CountLive
 
   def mount(_params, _session, socket) do
     socket =
@@ -32,7 +33,7 @@ defmodule BigrWeb.CountLive do
     <hr />
     <.game_grid>
       <%= for t <- 1..12 do %>
-        <.game table_number={t} count={Counter.show(@count)} />
+        <.live_component module={CountLive.Counter} id={"table#{t}"} table_number={t} />
       <% end %>
     </.game_grid>
     """
