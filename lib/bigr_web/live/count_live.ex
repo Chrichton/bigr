@@ -23,11 +23,11 @@ defmodule BigrWeb.CountLive do
     </button>
 
     <hr />
-    <div class="grid grid-cols-3 gap-4">
+    <.game_grid>
       <%= for t <- 1..12 do %>
         <.game table_number={t} />
       <% end %>
-    </div>
+    </.game_grid>
     """
   end
 
@@ -47,6 +47,17 @@ defmodule BigrWeb.CountLive do
   defp game(assigns) do
     ~H"""
     <div><%= @table_number %></div>
+    """
+  end
+
+  slot :inner_block
+
+  defp game_grid(assigns) do
+    ~H"""
+    <div class="grid grid-cols-3 gap-4">
+      <%= render_slot(@inner_block) %>
+      <div>Judges Table</div>
+    </div>
     """
   end
 end
