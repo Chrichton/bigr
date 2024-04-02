@@ -21,6 +21,13 @@ defmodule BigrWeb.CountLive do
     >
       Inc
     </button>
+
+    <hr />
+    <div class="grid grid-cols-3 gap-4">
+      <%= for t <- 1..12 do %>
+        <.game table_number={t} />
+      <% end %>
+    </div>
     """
   end
 
@@ -33,5 +40,13 @@ defmodule BigrWeb.CountLive do
     # |> update(:count, &(&1 + 1))
 
     {:noreply, socket}
+  end
+
+  attr :table_number, :integer, required: true
+
+  defp game(assigns) do
+    ~H"""
+    <div><%= @table_number %></div>
+    """
   end
 end
