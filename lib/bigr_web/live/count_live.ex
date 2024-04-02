@@ -21,11 +21,18 @@ defmodule BigrWeb.CountLive do
     >
       Inc
     </button>
+    <button
+      phx-click="dec"
+      class="rounded-lg bg-zinc-900 hover:bg-zinc-700
+    py-2 px-3 text-sm font-semibold leading-6 text-white active:text-white/80"
+    >
+      Dec
+    </button>
 
     <hr />
     <.game_grid>
       <%= for t <- 1..12 do %>
-        <.game table_number={t} count={t} />
+        <.game table_number={t} count={Counter.show(@count)} />
       <% end %>
     </.game_grid>
     """
@@ -36,8 +43,13 @@ defmodule BigrWeb.CountLive do
       socket
       |> assign(:count, Counter.inc(socket.assigns.count))
 
-    # or better
-    # |> update(:count, &(&1 + 1))
+    {:noreply, socket}
+  end
+
+  def handle_event("dec", _unsigned_params, socket) do
+    socket =
+      socket
+      |> assign(:count, Counter.dec(socket.assigns.count))
 
     {:noreply, socket}
   end
@@ -54,10 +66,14 @@ defmodule BigrWeb.CountLive do
       </div>
       <div class="px-6 pt-4 pb-2">
         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          Inc
+          <button phx-click="inc">
+            Inc
+          </button>
         </span>
         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          Dec
+          <button phx-click="dec">
+            Dec
+          </button>
         </span>
       </div>
     </div>
