@@ -25,7 +25,7 @@ defmodule BigrWeb.CountLive do
     <hr />
     <.game_grid>
       <%= for t <- 1..12 do %>
-        <.game table_number={t} />
+        <.game table_number={t} count={t} />
       <% end %>
     </.game_grid>
     """
@@ -42,11 +42,25 @@ defmodule BigrWeb.CountLive do
     {:noreply, socket}
   end
 
+  attr :count, :integer, default: 0
   attr :table_number, :integer, required: true
 
   defp game(assigns) do
     ~H"""
-    <div><%= @table_number %></div>
+    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2">Table <%= @table_number %></div>
+        <p class="text-2xl">Score: <%= @count %></p>
+      </div>
+      <div class="px-6 pt-4 pb-2">
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+          Inc
+        </span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+          Dec
+        </span>
+      </div>
+    </div>
     """
   end
 
@@ -56,7 +70,6 @@ defmodule BigrWeb.CountLive do
     ~H"""
     <div class="grid grid-cols-3 gap-4">
       <%= render_slot(@inner_block) %>
-      <div>Judges Table</div>
     </div>
     """
   end
