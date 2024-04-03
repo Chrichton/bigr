@@ -20,13 +20,14 @@ defmodule BigrWeb.CountLive.Counter do
         <p class="text-2xl">Score: <%= Counter.show(@count) %></p>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <.count_button click="inc" myself={@myself}>Inc</.count_button>
-        <.count_button click="dec" myself={@myself}>Dec</.count_button>
+        <.count_button click="change" by={1} myself={@myself}>Inc</.count_button>
+        <.count_button click="change" by={-1} myself={@myself}>Dec</.count_button>
       </div>
     </div>
     """
   end
 
+  attr :by, :integer, default: 1
   attr :myself, :any, required: true
   attr :click, :string
   slot :inner_block
@@ -37,24 +38,19 @@ defmodule BigrWeb.CountLive.Counter do
       class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
       phx-click={@click}
       phx-target={@myself}
+      phx-value-by={@by}
     >
       <%= render_slot(@inner_block) %>
     </span>
     """
   end
 
-  def handle_event("inc", _unsigned_params, socket) do
+  def handle_event("change", %{"by" => count_by}, socket) do
+    by = String.to_integer(count_by)
+
     socket =
       socket
-      |> assign(:count, Counter.inc(socket.assigns.count))
-
-    {:noreply, socket}
-  end
-
-  def handle_event("dec", _unsigned_params, socket) do
-    socket =
-      socket
-      |> assign(:count, Counter.dec(socket.assigns.count))
+      |> assign(:count, Counter.change(socket.assigns.count, by))
 
     {:noreply, socket}
   end
